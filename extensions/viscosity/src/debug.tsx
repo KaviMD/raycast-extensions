@@ -1,14 +1,13 @@
 import { List, Icon } from "@raycast/api";
 export default function Command() {
-  
-    return (
-        <List>
-        {getAllIcons().map((icon, index) => (
-          <List.Item title={`${icon}`} icon={{ source: icon }} key={index} />
-        ))}
-      </List>
-    );
-  }
+  return (
+    <List>
+      {getAllIcons().map((icon, index) => (
+        <List.Item title={`${icon}`} icon={{ source: icon }} key={index} />
+      ))}
+    </List>
+  );
+}
 
 function getAllIcons() {
   const icons: Icon[] = [];
