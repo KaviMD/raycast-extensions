@@ -1,0 +1,46 @@
+{
+  "$schema": "https://www.raycast.com/schemas/extension.json",
+  "name": "viscosity",
+  "title": "Viscosity",
+  "description": "Control Viscosity OpenVPN connections with Raycast",
+  "icon": "viscosity-icon.png",
+  "author": "kavidey",
+  "license": "MIT",
+  "commands": [
+    {
+      "name": "disconnectconnect",
+      "title": "Manage Viscosity Connections",
+      "description": "List, disconnect, and connect to Viscosity OpenVPN connections",
+      "mode": "view"
+    },{
+      "name": "debug",
+      "title": "Debug Viscosity Extension",
+      "description": "Tools for debugging Viscosity extension",
+      "mode": "view"
+    }
+  ],
+  "dependencies": {
+    "@raycast/api": "^1.27.1",
+    "react": "^17.0.2",
+    "react-reconciler": "^0.26.2",
+    "run-applescript": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "~16.10.0",
+    "@types/react": "^17.0.28",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "jshint": "^2.13.4",
+    "prettier": "^2.5.1",
+    "react-devtools": "^4.19.2",
+    "typescript": "^4.4.3"
+  },
+  "scripts": {
+    "build": "ray build -e dist",
+    "dev": "ray develop",
+    "fix-lint": "ray lint --fix",
+    "lint": "ray lint"
+  }
+}
