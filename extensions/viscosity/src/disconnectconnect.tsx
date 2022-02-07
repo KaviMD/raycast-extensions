@@ -14,19 +14,26 @@ import {
 export default function Command() {
   const [state, setState] = useState<State>({});
 
-  useEffect(() => {
-    async function fetchConnections() {
-      const items = await getConnections();
-      setState({ items });
-
-      if (items) {
-        Array.from(items).map(async ([name, connection], index) => {
-          const c = await getConnectionState(name);
-          items.set(name, c);
-          setState({ items });
-        });
-      }
+  async function updateConnections() {
+    if (state.items) {
+      Array.from(state.items).map(async ([name, connection], index) => {
+        const c = await getConnectionState(name);
+        if (state.items) {
+          state.items.set(name, c);
+          setState({ items: state.items });
+        }
+      });
     }
+  }
+
+  async function fetchConnections() {
+    const items = await getConnections();
+    setState({ items });
+
+    updateConnections();
+  }
+
+  useEffect(() => {
     fetchConnections();
   }, []);
 
@@ -42,7 +49,9 @@ export default function Command() {
               subtitle={connection.state}
               accessoryIcon={Icon.Globe}
               accessoryTitle={connection.serverAddress}
-              actions={<Actions connection={connection} />}
+              actions={
+                <Actions connection={connection} updateState={updateConnections} />
+              }
             />
           );
         })}
@@ -83,20 +92,20 @@ async function getConnections(): Promise<State["items"]> {
   return connections;
 }
 
-function Actions(props: { connection: Connection }) {
+function Actions(props: { connection: Connection; updateState: () => void }) {
   return (
     <ActionPanel title={props.connection.name}>
       <ActionPanel.Section>
         {props.connection.state === ConnectionState.Connected && (
           <ActionPanel.Item
             title="Disconnect"
-            onAction={() => disconnectFrom(props.connection)}
+            onAction={() => {disconnectFrom(props.connection); props.updateState()}}
           />
         )}
         {props.connection.state === ConnectionState.Disconnected && (
           <ActionPanel.Item
             title="Disconnect"
-            onAction={() => connectTo(props.connection)}
+            onAction={() => {connectTo(props.connection); props.updateState()}}
           />
         )}
       </ActionPanel.Section>
