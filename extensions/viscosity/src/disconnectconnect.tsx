@@ -16,6 +16,7 @@ export default function Command() {
 
   async function updateConnections() {
     if (state.items) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       Array.from(state.items).map(async ([name, connection], index) => {
         const c = await getConnectionState(name);
         if (state.items) {

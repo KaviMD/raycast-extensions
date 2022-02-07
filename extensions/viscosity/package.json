@@ -12,11 +12,6 @@
       "title": "Manage Viscosity Connections",
       "description": "List, disconnect, and connect to Viscosity OpenVPN connections",
       "mode": "view"
-    },{
-      "name": "debug",
-      "title": "Debug Viscosity Extension",
-      "description": "Tools for debugging Viscosity extension",
-      "mode": "view"
     }
   ],
   "dependencies": {
