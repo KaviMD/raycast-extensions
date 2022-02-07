@@ -1,4 +1,10 @@
-import { showToast, ToastStyle, ImageLike, ImageMask, closeMainWindow } from "@raycast/api";
+import {
+  showToast,
+  ToastStyle,
+  ImageLike,
+  ImageMask,
+  closeMainWindow,
+} from "@raycast/api";
 import { runAppleScript } from "run-applescript";
 
 export interface State {
@@ -66,8 +72,9 @@ export async function runAppleScriptSafe(
   }
 }
 
-
-export async function getConnectionState(connectionName: string): Promise<Connection> {
+export async function getConnectionState(
+  connectionName: string
+): Promise<Connection> {
   const { result, error } = await runAppleScriptSafe(
     `
     tell application "Viscosity"
@@ -115,11 +122,11 @@ export async function getConnectionState(connectionName: string): Promise<Connec
 
 export async function connectTo(connection: Connection, closeMW = true) {
   connection.state = ConnectionState.Connecting;
-  
+
   if (closeMW) {
     closeMainWindow();
   }
-  
+
   runAppleScriptSafe(
     `
     tell application "Viscosity" to connect "${connection.name}"
@@ -130,11 +137,11 @@ export async function connectTo(connection: Connection, closeMW = true) {
 
 export async function disconnectFrom(connection: Connection, closeMW = true) {
   connection.state = ConnectionState.Disconnecting;
-  
+
   if (closeMW) {
     closeMainWindow();
   }
-  
+
   runAppleScriptSafe(
     `
     tell application "Viscosity" to disconnect "${connection.name}"

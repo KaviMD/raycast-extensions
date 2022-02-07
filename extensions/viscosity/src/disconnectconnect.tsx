@@ -50,7 +50,10 @@ export default function Command() {
               accessoryIcon={Icon.Globe}
               accessoryTitle={connection.serverAddress}
               actions={
-                <Actions connection={connection} updateState={updateConnections} />
+                <Actions
+                  connection={connection}
+                  updateState={updateConnections}
+                />
               }
             />
           );
@@ -99,13 +102,19 @@ function Actions(props: { connection: Connection; updateState: () => void }) {
         {props.connection.state === ConnectionState.Connected && (
           <ActionPanel.Item
             title="Disconnect"
-            onAction={() => {disconnectFrom(props.connection); props.updateState()}}
+            onAction={() => {
+              disconnectFrom(props.connection);
+              props.updateState();
+            }}
           />
         )}
         {props.connection.state === ConnectionState.Disconnected && (
           <ActionPanel.Item
             title="Disconnect"
-            onAction={() => {connectTo(props.connection); props.updateState()}}
+            onAction={() => {
+              connectTo(props.connection);
+              props.updateState();
+            }}
           />
         )}
       </ActionPanel.Section>
