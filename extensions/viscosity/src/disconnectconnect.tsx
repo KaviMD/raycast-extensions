@@ -16,29 +16,41 @@ export default function Command() {
 
   useEffect(() => {
     async function fetchConnections() {
-      setState({ items: await getConnections() });
+      const items = await getConnections();
+      setState({ items });
+
+      if (items) {
+        Array.from(items).map(async ([name, connection], index) => {
+          const c = await getConnectionState(name);
+          items.set(name, c);
+          setState({ items });
+        });
+      }
     }
     fetchConnections();
   }, []);
 
   return (
     <List isLoading={state.items === undefined}>
-      {state.items?.map((connection, index) => (
-        <List.Item
-          title={connection.name}
-          key={index}
-          icon={ConnectionStateIcons.get(connection.state)}
-          subtitle={connection.state}
-          accessoryIcon={Icon.Globe}
-          accessoryTitle={connection.serverAddress}
-          actions={<Actions connection={connection} />}
-        />
-      ))}
+      {state.items !== undefined &&
+        Array.from(state.items).map(([name, connection], index) => {
+          return (
+            <List.Item
+              title={name}
+              key={index}
+              icon={ConnectionStateIcons.get(connection.state)}
+              subtitle={connection.state}
+              accessoryIcon={Icon.Globe}
+              accessoryTitle={connection.serverAddress}
+              actions={<Actions connection={connection} />}
+            />
+          );
+        })}
     </List>
   );
 }
 
-async function getConnections(): Promise<Connection[]> {
+async function getConnections(): Promise<State["items"]> {
   const { result, error } = await runAppleScriptSafe(
     `
     tell application "Viscosity"
@@ -50,15 +62,23 @@ async function getConnections(): Promise<Connection[]> {
   );
 
   if (error !== "") {
-    return [];
+    return new Map();
   }
 
-  const promises = result.split(", ").map(async (connectionName) => {
-    const connection = await getConnectionState(connectionName);
-    return connection;
-  });
+  const connections: State["items"] = new Map();
 
-  const connections = await Promise.all(promises);
+  result.split(", ").map((connectionName) => {
+    connections.set(connectionName, {
+      name: connectionName,
+      state: ConnectionState.Disconnected,
+      timeConnected: "",
+      IPv4Address: "",
+      IPv6Address: "",
+      serverIPv4Address: "",
+      serverIPv6Address: "",
+      serverAddress: "",
+    });
+  });
 
   return connections;
 }
