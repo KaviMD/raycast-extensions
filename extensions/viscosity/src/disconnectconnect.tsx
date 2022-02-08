@@ -1,4 +1,4 @@
-import { List, Icon, ActionPanel } from "@raycast/api";
+import { List, Icon, ActionPanel, popToRoot } from "@raycast/api";
 import { useEffect, useState } from "react";
 import {
   Connection,
@@ -14,15 +14,17 @@ import {
 export default function Command() {
   const [state, setState] = useState<State>({});
 
-  async function updateConnections() {
-    if (state.items) {
+  async function updateConnections(input_items?: Map<string, Connection>) {
+    const i = input_items || state.items;
+
+    if (i) {
+      const itemsCopy = new Map(i);
+
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      Array.from(state.items).map(async ([name, connection], index) => {
+      Array.from(itemsCopy).map(async ([name, connection], index) => {
         const c = await getConnectionState(name);
-        if (state.items) {
-          state.items.set(name, c);
-          setState({ items: state.items });
-        }
+        itemsCopy.set(name, c);
+        setState({ items: itemsCopy });
       });
     }
   }
@@ -31,7 +33,7 @@ export default function Command() {
     const items = await getConnections();
     setState({ items });
 
-    updateConnections();
+    updateConnections(items);
   }
 
   useEffect(() => {
@@ -106,6 +108,7 @@ function Actions(props: { connection: Connection; updateState: () => void }) {
             onAction={() => {
               disconnectFrom(props.connection);
               props.updateState();
+              popToRoot();
             }}
           />
         )}
@@ -115,6 +118,7 @@ function Actions(props: { connection: Connection; updateState: () => void }) {
             onAction={() => {
               connectTo(props.connection);
               props.updateState();
+              popToRoot();
             }}
           />
         )}
