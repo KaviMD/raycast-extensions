@@ -12,6 +12,12 @@
       "title": "Manage Viscosity Connections",
       "description": "List, disconnect, and connect to Viscosity OpenVPN connections",
       "mode": "view"
+    },
+    {
+      "name": "disconnectall",
+      "title": "Disconnect All Viscosity Connections",
+      "description": "Disconnect all viscosity connections",
+      "mode": "view"
     }
   ],
   "dependencies": {
