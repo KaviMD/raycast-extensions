@@ -1,5 +1,5 @@
 import { runAppleScriptSafe } from "./lib/util";
-import { closeMainWindow, popToRoot } from "@raycast/api"
+import { closeMainWindow, popToRoot } from "@raycast/api";
 
 export default async () => {
   runAppleScriptSafe(
