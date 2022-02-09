@@ -108,7 +108,7 @@ function Actions(props: { connection: Connection; updateState: () => void }) {
             onAction={() => {
               disconnectFrom(props.connection);
               props.updateState();
-              popToRoot();
+              // popToRoot();
             }}
           />
         )}
@@ -118,7 +118,7 @@ function Actions(props: { connection: Connection; updateState: () => void }) {
             onAction={() => {
               connectTo(props.connection);
               props.updateState();
-              popToRoot();
+              // popToRoot();
             }}
           />
         )}

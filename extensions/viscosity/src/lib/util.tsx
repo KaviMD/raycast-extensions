@@ -1,9 +1,11 @@
 import {
-  showToast,
+  Toast,
   ToastStyle,
+  ToastOptions,
   ImageLike,
   ImageMask,
   closeMainWindow,
+  copyTextToClipboard,
 } from "@raycast/api";
 import { runAppleScript } from "run-applescript";
 
@@ -58,16 +60,22 @@ export const ConnectionStateIcons: Map<ConnectionState, ImageLike> = new Map([
 export async function runAppleScriptSafe(
   script: string,
   errorMessage: string,
-  detailedErrorMessage = false
 ): Promise<{ result: string; error: string }> {
   try {
     return { result: await runAppleScript(script), error: "" };
   } catch (error) {
-    showToast(
-      ToastStyle.Failure,
-      errorMessage,
-      detailedErrorMessage ? String(error) : undefined
-    );
+    const options: ToastOptions = {
+      style: ToastStyle.Failure,
+      title: errorMessage,
+      primaryAction: {
+        title: "Copy Error Log",
+        onAction: () => {
+          copyTextToClipboard(String(error));
+        }
+      }
+    };
+    const toast = new Toast(options);
+    toast.show();
     return { result: "", error: String(error) };
   }
 }

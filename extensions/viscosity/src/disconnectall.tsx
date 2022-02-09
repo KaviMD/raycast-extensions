@@ -1,11 +1,13 @@
 import { runAppleScriptSafe } from "./lib/util";
-import { closeMainWindow, popToRoot } from "@raycast/api";
+import { popToRoot, showHUD } from "@raycast/api";
 
 export default async () => {
-  runAppleScriptSafe(
+  const { result, error } = await runAppleScriptSafe(
     'tell application "Viscosity" to disconnectall',
     "Viscosity is not installed"
   );
-  closeMainWindow();
   popToRoot();
+  if (result !== undefined) {
+    await showHUD("Disconnected from all servers");
+  }
 };
